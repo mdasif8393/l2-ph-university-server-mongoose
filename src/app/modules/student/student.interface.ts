@@ -25,6 +25,13 @@ export type Guardian = {
   motherContactNo: string;
 };
 
+export type LocalGuardian = {
+  name: string;
+  occupation: string;
+  contactNo: string;
+  address: string;
+};
+
 export type IStudent = {
   id: string;
   name: Name;
@@ -37,4 +44,7 @@ export type IStudent = {
   presentAddress: string;
   permanentAddress: string;
   guardian: Guardian;
+  localGuardian: LocalGuardian;
+  profileImage?: string;
+  isActive: 'active' | 'inActive';
 };
