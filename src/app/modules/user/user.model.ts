@@ -5,13 +5,13 @@ const userSchema = new Schema<TUser>(
   {
     id: { type: String, required: true },
     password: { type: String, required: true },
-    needsPasswordChange: { type: Boolean, required: true },
+    needsPasswordChange: { type: Boolean, default: true },
     role: {
       type: String,
       enum: ['admin', 'faculty', 'student'],
       required: true,
     },
-    isDeleted: { type: Boolean, required: true },
+    isDeleted: { type: Boolean, default: false },
     status: { type: String, enum: ['in-progress', 'blocked'] },
   },
   {
