@@ -19,7 +19,7 @@ const findLastStudentId = async () => {
   return lastStudent?.id ? lastStudent?.id : undefined;
 };
 
-// 2030 01 0000
+//2030 01 0000
 export const generateStudentId = async (payload: TAcademicSemester) => {
   // first time 0000
   let currentId = (0).toString(); // 0000 by default
