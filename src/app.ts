@@ -13,12 +13,13 @@ app.use(cors());
 // application routes
 app.use('/api/v1', router);
 
-const getAController = (req: Request, res: Response) => {
-  const a = 10;
-  res.send(a);
+const test = (req: Request, res: Response) => {
+  // const a = 10;
+  // res.send(a);
+  res.send('PH University server is running');
 };
 
-app.get('/', getAController);
+app.get('/', test);
 
 // global error handler
 app.use(globalErrorHandler);

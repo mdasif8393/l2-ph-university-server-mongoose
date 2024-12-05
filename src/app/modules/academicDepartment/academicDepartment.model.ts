@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import { model, Schema } from 'mongoose';
+import AppError from '../../errors/AppError';
 import { TAcademicDepartment } from './academicDepartment.interface';
 
 const academicDepartmentSchema = new Schema<TAcademicDepartment>(
@@ -19,7 +21,10 @@ academicDepartmentSchema.pre('save', async function (next) {
     name: this.name,
   });
   if (isAcademicDepartmentExists) {
-    throw new Error('Academic Department already exists');
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'This Academic Department already exists',
+    );
   }
   next();
 });
@@ -30,7 +35,10 @@ academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
 
   const isDepartmentExists = await AcademicDepartment.findOne(query);
   if (!isDepartmentExists) {
-    throw new Error('This Academic Department does not exists');
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'This Academic Department does not exists',
+    );
   }
   next();
 });

@@ -1,4 +1,6 @@
+import httpStatus from 'http-status';
 import { model, Schema } from 'mongoose';
+import AppError from '../../errors/AppError';
 import { TAcademicFaculty } from './academicFaculty.interface';
 
 export const academicFacultySchema = new Schema<TAcademicFaculty>(
@@ -17,7 +19,10 @@ academicFacultySchema.pre('save', async function (next) {
   });
 
   if (isAcademicFacultyExists) {
-    throw new Error('This Academic Faculty already exits');
+    throw new AppError(
+      httpStatus.CONFLICT,
+      'This Academic Faculty already exits',
+    );
   }
   next();
 });
@@ -29,7 +34,10 @@ academicFacultySchema.pre('findOneAndUpdate', async function (next) {
   const isAcademicFacultyExists = await AcademicFaculty.findOne(query);
 
   if (!isAcademicFacultyExists) {
-    throw new Error('This Academic faculty does not exists');
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'This Academic faculty does not exists',
+    );
   }
   next();
 });
