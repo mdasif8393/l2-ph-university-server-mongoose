@@ -52,7 +52,7 @@ const updateAcademicDepartment = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Academic Faculty is updated successfully',
+    message: 'Academic Department is updated successfully',
     data: result,
   });
 });
