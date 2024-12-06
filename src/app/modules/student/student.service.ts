@@ -34,8 +34,20 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
     ...remainingStudentData,
   };
 
+  /*
+  Postman From
+  guardian: {
+    fatherOccupation: "Teacher" // [key: value]
+  }
+
+
+  Converted To
+  guardian.fatherOccupation: "Teacher"
+  */
+
   if (name && Object.keys(name).length) {
     for (const [key, value] of Object.entries(name)) {
+      // "name.firstName" = "Mezba"
       modifiedUpdatedData[`name.${key}`] = value;
     }
   }
@@ -51,8 +63,6 @@ const updateStudentIntoDB = async (id: string, payload: Partial<TStudent>) => {
       modifiedUpdatedData[`guardian.${key}`] = value;
     }
   }
-
-  console.log(modifiedUpdatedData);
 
   const result = await Student.findOneAndUpdate({ id }, modifiedUpdatedData, {
     new: true,
