@@ -3,17 +3,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
+import config from '../config';
+import handleZodError from '../errors/handleZodError';
+import { TErrorSource } from '../interface/error';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  type TErrorSource = {
-    path: string | number;
-    message: string;
-  }[];
-
   // setting default values
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong';
-  const errorSources: TErrorSource = [
+  let errorSources: TErrorSource = [
     {
       path: '',
       message: 'Something Went Wrong',
@@ -21,15 +19,17 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   ];
 
   if (err instanceof ZodError) {
-    statusCode = 400;
-    message = 'Ami zod error';
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
   }
 
   return res.status(statusCode).json({
     success: false,
     message,
     errorSources,
-    amiError: err,
+    stack: config.NODE_ENV === 'development' ? err?.stack : null,
   });
 };
 
