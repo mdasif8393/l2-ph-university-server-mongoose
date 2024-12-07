@@ -5,6 +5,7 @@
 import { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 import config from '../config';
+import AppError from '../errors/AppError';
 import handleCastError from '../errors/handleCastError';
 import handleDuplicateError from '../errors/handleDuplicateError';
 import handleValidationError from '../errors/handleValidationError';
@@ -37,19 +38,31 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errorSources = simplifiedError?.errorSources;
   }
   // check err is cast error
-  if (err.name === 'CastError') {
+  else if (err.name === 'CastError') {
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
   }
   // check err is duplicate error
-  if (err?.code === 11000) {
+  else if (err?.code === 11000) {
     const simplifiedError = handleDuplicateError(err);
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
   }
+  // handle AppError
+  else if (err instanceof AppError) {
+    statusCode = err?.statusCode;
+    message = err?.message;
+    errorSources = [{ path: '', message: err?.message }];
+  }
+  // check err is Error
+  else if (err instanceof Error) {
+    message = err.message;
+    errorSources = [{ path: '', message: err?.message }];
+  }
+
   return res.status(statusCode).json({
     success: false,
     message,
