@@ -6,13 +6,26 @@ import { TStudent } from './student.interface';
 import { Student } from './student.model';
 
 const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
+  /*
+  http://localhost:5000/api/v1/students?searchTerm=ravi&email=ravi@gmail.com&sort=-email&limit=2
+  console.log({ query });
+  {
+  query: {
+    searchTerm: 'ravi',
+    email: 'ravi@gmail.com',
+    sort: '-email',
+    limit: '2'
+  }
+}
+  */
+
+  // make another object same as query
   const queryObj = { ...query };
-  console.log('base query:', query);
+  console.log({ query });
 
   // search query
   const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
 
-  // search query
   let searchTerm = '';
   if (query?.searchTerm) {
     searchTerm = query?.searchTerm as string;
@@ -27,7 +40,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
   // Filter query
   // exclude searchTerm from queryObj
-  const excludeFields = ['searchTerm', 'sort', 'limit'];
+  const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
   excludeFields.forEach((el) => delete queryObj[el]);
 
   const filterQuery = searchQuery
@@ -40,7 +53,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
     });
 
   // sort query
-  let sort = 'createdAt';
+  let sort = '-createdAAt';
   if (query.sort) {
     sort = query.sort as string;
   }
@@ -48,14 +61,35 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   const sortQuery = filterQuery.sort(sort);
 
   // limit query
-  let limit = 1;
+
+  let page = 1;
+  let limit = 10;
+  let skip = 0;
+
   if (query.limit) {
-    limit = query.limit as number;
+    limit = Number(query.limit);
   }
 
-  const limitQuery = await sortQuery.limit(limit);
+  if (query.page) {
+    page = Number(query.page);
+    skip = (page - 1) * limit;
+  }
 
-  return limitQuery;
+  // pagination
+  const paginateQuery = sortQuery.skip(skip);
+  const limitQuery = paginateQuery.limit(limit);
+
+  // field limiting
+  let fields = '-__v';
+
+  // fields: 'name,email' to 'name email'
+  if (query.fields) {
+    fields = (query.fields as string).split(',').join(' ');
+  }
+
+  const fieldQuery = await limitQuery.select(fields);
+
+  return fieldQuery;
 };
 
 const getSingleStudentFromDB = async (id: string) => {
