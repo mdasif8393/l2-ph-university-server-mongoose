@@ -67,7 +67,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     message,
     errorSources,
-    // err,
+    err,
     // send stack is app is in development mode
     stack: config.NODE_ENV === 'development' ? err?.stack : null,
   });
