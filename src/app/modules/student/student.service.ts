@@ -21,7 +21,6 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
 
   // make another object same as query
   const queryObj = { ...query };
-  console.log({ query });
 
   // search query
   const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
