@@ -4,6 +4,7 @@ import { TCourse, TPreRequisiteCourses } from './course.interface';
 const preRequisiteCourseSchema = new Schema<TPreRequisiteCourses>({
   course: {
     type: Schema.Types.ObjectId,
+    ref: 'Course',
   },
   isDeleted: {
     type: Boolean,
@@ -33,7 +34,7 @@ const courseSchema = new Schema<TCourse>({
     trim: true,
     required: true,
   },
-  preRequisiteCourse: [preRequisiteCourseSchema],
+  preRequisiteCourses: [preRequisiteCourseSchema],
 });
 
 export const Course = model<TCourse>('Course', courseSchema);
