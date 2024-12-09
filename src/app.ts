@@ -14,9 +14,7 @@ app.use(cors());
 app.use('/api/v1', router);
 
 const test = async (req: Request, res: Response) => {
-  Promise.reject();
-  // const a = 10;
-  // res.send(a);
+  res.send('App in listening on 5000...');
 };
 
 app.get('/', test);

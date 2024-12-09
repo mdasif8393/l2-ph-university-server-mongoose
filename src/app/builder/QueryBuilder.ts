@@ -89,7 +89,7 @@ class QueryBuilder<T> {
   // sort query
   sort() {
     const sort =
-      (this.query.sort as string)?.split(',')?.join(' ') || '-createdAAt';
+      (this?.query?.sort as string)?.split(',')?.join(' ') || '-createdAAt';
     this.modelQuery = this.modelQuery.sort(sort as string);
 
     return this;
