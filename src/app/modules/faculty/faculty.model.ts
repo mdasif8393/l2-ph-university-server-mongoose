@@ -56,7 +56,7 @@ const facultySchema = new Schema<TFaculty>(
     bloogGroup: {
       type: String,
       enum: {
-        value: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+        values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
         message: '{VALUE} is not a valid blood group',
       },
     },
