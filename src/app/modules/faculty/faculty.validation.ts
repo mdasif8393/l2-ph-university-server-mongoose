@@ -37,7 +37,7 @@ export const UpdateFacultyValidationSchema = z.object({
   body: z.object({
     faculty: z.object({
       designation: z.string().optional(),
-      name: facultyNameValidationSchema.optional(),
+      name: updateFacultyNameValidationSchema.optional(),
       gender: z.enum(['male', 'female', 'other']).optional(),
       dateOfBirth: z.string().optional(),
       email: z.string().email().optional(),

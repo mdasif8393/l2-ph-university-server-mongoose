@@ -3,6 +3,7 @@
 import { TAcademicSemester } from '../academicSemester/academicSemester.interface';
 import { User } from './user.model';
 
+// create student id
 const findLastStudentId = async () => {
   const lastStudent = await User.findOne(
     {
@@ -43,4 +44,35 @@ export const generateStudentId = async (payload: TAcademicSemester) => {
   let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
   incrementId = `${payload.year}${payload.code}${incrementId}`;
   return incrementId;
+};
+
+// create faculty id
+const findLastFacultyId = async () => {
+  const lastFaculty = await User.findOne(
+    {
+      role: 'faculty',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({ createdAt: -1 })
+    .lean();
+
+  return lastFaculty?.id ? lastFaculty?.id : undefined;
+};
+
+export const generateFacultyId = async () => {
+  let currentId = (0).toString();
+  const lastFacultyId = await findLastFacultyId();
+
+  if (lastFacultyId) {
+    currentId = lastFacultyId?.substring(2);
+  }
+
+  let incrementedId = (Number(currentId) + 1).toString().padStart(4, '0');
+  incrementedId = `A-${incrementedId}`;
+
+  return incrementedId;
 };

@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import config from '../../config';
 import AppError from '../../errors/AppError';
+import { TFaculty } from '../faculty/faculty.interface';
 import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { AcademicSemester } from './../academicSemester/academicSemester.model';
@@ -60,6 +61,13 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     await session.endSession();
     throw new Error(err);
   }
+};
+
+const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
+  const userData: Partial<TUser> = {};
+  userData.password = password || config.default_password;
+  userData.role = 'faculty';
+  userData.
 };
 
 export const UserServices = {
