@@ -9,6 +9,24 @@ class QueryBuilder<T> {
     this.query = query;
   }
 
+  // search query method similar code from student.service.ts
+  /*
+const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
+
+  let searchTerm = '';
+  if (query?.searchTerm) {
+    searchTerm = query?.searchTerm as string;
+  }
+
+  const searchQuery = Student.find({
+    $or: studentSearchableFields.map((field) => ({
+      //   { email: { $regex: 'ravi', $options: 'i' } }
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  });
+
+*/
+
   // search query method
   // searchableFields come from peremeter
   search(searchableFields: string[]) {
@@ -27,42 +45,13 @@ class QueryBuilder<T> {
         ),
       });
     }
-    // return mother this
+    // return mother this for chaining on model
     return this;
   }
 
-  // filter query method
-  filter() {
-    const queryObj = { ...this.query }; // copy
+  // filter query method similar code from student.service.ts
 
-    const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-    excludeFields.forEach((el) => delete queryObj[el]);
-
-    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
-  }
-}
-
-// search query method similar code from student.service.ts
-/*
-const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
-
-  let searchTerm = '';
-  if (query?.searchTerm) {
-    searchTerm = query?.searchTerm as string;
-  }
-
-  const searchQuery = Student.find({
-    $or: studentSearchableFields.map((field) => ({
-      //   { email: { $regex: 'ravi', $options: 'i' } }
-      [field]: { $regex: searchTerm, $options: 'i' },
-    })),
-  });
-
-*/
-
-// filter query method similar code from student.service.ts
-
-/*
+  /*
       
       // Filter query
   // exclude searchTerm from queryObj
@@ -72,10 +61,19 @@ const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
 
   const filterQuery = searchQuery
     .find(queryObj)
-    .populate('user')
-    .populate('admissionSemester')
-    .populate({
-      path: 'academicDepartment',
-      populate: { path: 'academicFaculty' },
     });
 */
+
+  // filter query method
+  filter() {
+    const queryObj = { ...this.query }; // copy ll queries
+
+    const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+    excludeFields.forEach((el) => delete queryObj[el]); // in queryObj put only filter params
+
+    this.modelQuery = this.modelQuery.find(queryObj as FilterQuery<T>);
+
+    // return mother this for chaining on model
+    return this;
+  }
+}

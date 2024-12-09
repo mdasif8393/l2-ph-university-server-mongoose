@@ -40,8 +40,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // Filter query
   // exclude searchTerm from queryObj
   const excludeFields = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
-  excludeFields.forEach((el) => delete queryObj[el]);
-
+  excludeFields.forEach((el) => delete queryObj[el]); // in queryObj put only filter params
   const filterQuery = searchQuery
     .find(queryObj)
     .populate('user')
@@ -54,7 +53,7 @@ const getAllStudentsFromDB = async (query: Record<string, unknown>) => {
   // sort query
   let sort = '-createdAAt';
   if (query.sort) {
-    sort = query.sort as string;
+    sort = (query.sort as string).split(',').join(' ');
   }
 
   const sortQuery = filterQuery.sort(sort);
