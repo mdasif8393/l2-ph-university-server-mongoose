@@ -1,4 +1,4 @@
-import { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { BloodGroup, Gender } from './faculty.constant';
 import { TFaculty, TFacultyName } from './faculty.interface';
 
@@ -36,4 +36,7 @@ const facultySchema = new Schema<TFaculty>({
   academicDepartment: { type: Schema.Types.ObjectId, required: true },
   isDeleted: { type: Boolean, default: false },
   bloogGroup: { type: String, enum: BloodGroup, required: true },
+  user: { type: Schema.Types.ObjectId, required: true },
 });
+
+export const Faculty = model<TFaculty>('Faculty', facultySchema);

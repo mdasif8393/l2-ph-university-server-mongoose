@@ -20,9 +20,9 @@ export type TBloodGroup =
 
 export type TFaculty = {
   id: string;
+  name: TFacultyName;
   designation: string;
   gender: TGender;
-  name: TFacultyName;
   dateOfBirth?: string;
   email: string;
   contactNo: string;
@@ -33,4 +33,5 @@ export type TFaculty = {
   academicDepartment: Types.ObjectId;
   isDeleted?: boolean;
   bloogGroup?: TBloodGroup;
+  user: Types.ObjectId;
 };
