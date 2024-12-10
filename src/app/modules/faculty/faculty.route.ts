@@ -5,4 +5,6 @@ const router = express.Router();
 
 router.get('/', FacultyControllers.getAllFaculties);
 
+router.get('/:id', FacultyControllers.getSingleFaculty);
+
 export const FacultyRoutes = router;

@@ -33,7 +33,11 @@ const facultySchema = new Schema<TFaculty>({
   presentAddress: { type: String, required: true },
   permanentAddress: { type: String, required: true },
   profileImg: { type: String },
-  academicDepartment: { type: Schema.Types.ObjectId, required: true },
+  academicDepartment: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: 'AcademicDepartment',
+  },
   isDeleted: { type: Boolean, default: false },
   bloogGroup: { type: String, enum: BloodGroup, required: true },
   user: { type: Schema.Types.ObjectId, required: true },
