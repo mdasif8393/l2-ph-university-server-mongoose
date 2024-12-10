@@ -1,7 +1,13 @@
-/* eslint-disable no-unused-vars */
-import { Model, Types } from 'mongoose';
+import { Types } from 'mongoose';
+
+export type TFacultyName = {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+};
 
 export type TGender = 'male' | 'female' | 'other';
+
 export type TBloodGroup =
   | 'A+'
   | 'A-'
@@ -12,30 +18,19 @@ export type TBloodGroup =
   | 'O+'
   | 'O-';
 
-export type TUserName = {
-  firstName: string;
-  middleName: string;
-  lastName: string;
-};
-
 export type TFaculty = {
   id: string;
-  user: Types.ObjectId;
   designation: string;
-  name: TUserName;
   gender: TGender;
-  dateOfBirth?: Date;
+  name: TFacultyName;
+  dateOfBirth?: string;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloogGroup?: TBloodGroup;
   presentAddress: string;
   permanentAddress: string;
   profileImg?: string;
   academicDepartment: Types.ObjectId;
-  isDeleted: boolean;
+  isDeleted?: boolean;
+  bloogGroup?: TBloodGroup;
 };
-
-export interface FacultyModel extends Model<TFaculty> {
-  isUserExists(id: string): Promise<TFaculty | null>;
-}
