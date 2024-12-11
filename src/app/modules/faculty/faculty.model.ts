@@ -43,4 +43,14 @@ const facultySchema = new Schema<TFaculty>({
   user: { type: Schema.Types.ObjectId, required: true },
 });
 
+facultySchema.pre('find', function (next) {
+  this.find({ isDeleted: false });
+  next();
+});
+
+facultySchema.pre('findOne', function (next) {
+  this.findOne({ isDeleted: false });
+  next();
+});
+
 export const Faculty = model<TFaculty>('Faculty', facultySchema);

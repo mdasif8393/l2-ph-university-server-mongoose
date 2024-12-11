@@ -21,7 +21,32 @@ const getSingleFaculty = catchAsync(async (req, res) => {
   });
 });
 
+const updateFaculty = catchAsync(async (req, res) => {
+  const result = await FacultyServices.updateStudentIntoDB(
+    req.params.id,
+    req.body.faculty,
+  );
+
+  res.status(200).json({
+    success: true,
+    message: 'Faculty is updated successfully',
+    data: result,
+  });
+});
+
+const deleteFaculty = catchAsync(async (req, res) => {
+  const result = await FacultyServices.deleteFacultyFromDB(req.params.id);
+
+  res.status(200).json({
+    success: true,
+    message: 'Faculty is deleted successfully',
+    data: result,
+  });
+});
+
 export const FacultyControllers = {
   getAllFaculties,
   getSingleFaculty,
+  updateFaculty,
+  deleteFaculty,
 };

@@ -48,7 +48,7 @@ const updateFacultyValidationSchema = z.object({
       permanentAddress: z.string().optional(),
       profileImg: z.string().optional(),
       academicDepartment: z.string().optional(),
-      bloogGroup: z.enum(BloodGroup as [string, ...string[]]),
+      bloogGroup: z.enum(BloodGroup as [string, ...string[]]).optional(),
     }),
   }),
 });
