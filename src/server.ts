@@ -26,11 +26,11 @@ process.on('unhandledRejection', () => {
       process.exit(1);
     });
   }
-  process.exit(1);
+  // process.exit(1);
 });
 
 // uncaughtException
 process.on('uncaughtException', () => {
   console.log(`😈 uncaughtException is detected , shutting down ...`);
-  process.exit(1);
+  // process.exit(1);
 });

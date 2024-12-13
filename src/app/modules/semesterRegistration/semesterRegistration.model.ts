@@ -1,18 +1,19 @@
-import { model, Schema } from 'mongoose';
-import { SemesterRegistrationStatuses } from './semesterRegistration.constant';
+import mongoose, { Schema } from 'mongoose';
+
+import { SemesterRegistrationStatus } from './semesterRegistration.constant';
 import { TSemesterRegistration } from './semesterRegistration.interface';
 
-const semesterRegistrationSchema = new Schema<TSemesterRegistration>(
+const semesterRegistrationSchema = new mongoose.Schema<TSemesterRegistration>(
   {
-    acaDemicSemester: {
+    academicSemester: {
       type: Schema.Types.ObjectId,
-      ref: 'AcademicSemester',
       required: true,
+      ref: 'AcademicSemester',
       unique: true,
     },
     status: {
       type: String,
-      enum: SemesterRegistrationStatuses,
+      enum: SemesterRegistrationStatus,
       default: 'UPCOMING',
     },
     startDate: {
@@ -37,7 +38,7 @@ const semesterRegistrationSchema = new Schema<TSemesterRegistration>(
   },
 );
 
-export const SemesterRegistration = model<TSemesterRegistration>(
+export const SemesterRegistration = mongoose.model<TSemesterRegistration>(
   'SemesterRegistration',
   semesterRegistrationSchema,
 );
