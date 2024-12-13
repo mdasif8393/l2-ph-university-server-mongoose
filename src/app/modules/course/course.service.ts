@@ -37,6 +37,7 @@ const getSingleCourseFromDB = async (id: string) => {
 };
 
 const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
+  // seperate preRequisite course
   const { preRequisiteCourses, ...courseRemainingData } = payload;
   const session = await mongoose.startSession();
 
@@ -56,13 +57,18 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
     }
 
     // check there is any preRequisite courses to update
+    // 1st remove courses where is isDeleted:true and remove them from preRequisites array
+    // 2nd add course in preRequisite array where isDeleted:false
     if (preRequisiteCourses && preRequisiteCourses.length > 0) {
-      // filter out the deleted fields where isDeleted: true  and get course from the filter array using map.
       const deletedPreRequisites = preRequisiteCourses
+        // filter out the deleted fields from preRequisiteCourses where isDeleted: true
+        // [{course: '6758029f7f7b5b4fb71ba656', isDeleted: true}]
         .filter((el) => el.course && el.isDeleted)
+        // get course which is basically id from the filter array using map.
+        //['6758029f7f7b5b4fb71ba656']
         .map((el) => el.course);
 
-      // delete course from pre requisite courses
+      // remove course from pre requisite courses array
       const deletedPreRequisitesCourses = await Course.findByIdAndUpdate(
         id,
         {
@@ -81,6 +87,7 @@ const updateCourseIntoDB = async (id: string, payload: Partial<TCourse>) => {
       }
 
       // filter out the new course field where is Deleted false
+      //  [ {course: '6758029f7f7b5b4fb71ba656', isDeleted: 'false'} ]
       const newPreRequisites = preRequisiteCourses.filter(
         (el) => el.course && !el.isDeleted,
       );
