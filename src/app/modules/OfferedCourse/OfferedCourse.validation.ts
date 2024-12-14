@@ -13,7 +13,11 @@ const createOfferedCourseValidationSchema = z.object({
       section: z.number(),
       maxCapacity: z.number(),
       days: z.array(z.enum([...Days] as [string, ...string[]])),
+
       startTime: z.string().refine(
+        // check time format is ok or not HH:MM 23:59
+        // time == startTime
+        // if return false then show error message
         (time) => {
           const regex = /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/;
           return regex.test(time);
@@ -32,6 +36,8 @@ const createOfferedCourseValidationSchema = z.object({
         },
       ),
     })
+    // check endTime > startTime or not
+    // if end less than start then show error
     .refine((body) => {
       const start = new Date(`1970-01-01T${body?.startTime}:00`);
       const end = new Date(`1970-01-01T${body?.endTime}:00`);
