@@ -2,7 +2,6 @@ import catchAsync from '../../utils/catchAsync';
 import { FacultyServices } from './faculty.service';
 
 const getAllFaculties = catchAsync(async (req, res) => {
-  console.log('decoded user:', req.user);
   const result = await FacultyServices.getAllFacultiesFromDB(req.query);
 
   res.status(200).json({
