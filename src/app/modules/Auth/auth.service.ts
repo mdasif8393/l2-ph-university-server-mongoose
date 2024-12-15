@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
@@ -50,7 +52,7 @@ const changePassword = async (
   payload: { oldPassword: string; newPassword: string },
 ) => {
   // checking if the user is exist
-  const user = await User.isUserExistsByCustomId(userData.userId);
+  const user = await User.isUserExistsByCustomId(userData?.userId);
 
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found !');
@@ -72,19 +74,20 @@ const changePassword = async (
   }
 
   //checking if the password is correct
-
   if (!(await User.isPassWordMatch(payload?.oldPassword, user?.password)))
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
 
+  // hashed new password
   const newHashedPassword = await bcrypt.hash(
     payload?.newPassword,
     Number(config.bcrypt_salt_rounds),
   );
 
+  // update password and needsPasswordChange
   const result = await User.findOneAndUpdate(
     {
-      id: userData.userId,
-      role: userData.role,
+      id: userData?.userId,
+      role: userData?.role,
     },
     {
       password: newHashedPassword,

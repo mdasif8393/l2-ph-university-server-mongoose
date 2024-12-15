@@ -9,6 +9,7 @@ export interface TUser {
   role: 'student' | 'faculty' | 'admin';
   isDeleted: boolean;
   status: 'in-progress' | 'blocked';
+  passwordChangedAt?: Date;
 }
 
 // check is password match and isUser exists using static
@@ -18,6 +19,10 @@ export interface UserModel extends Model<TUser> {
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
+  isJWTIssuedBeforePasswordChanged(
+    passwordChangedTimestamp: Date,
+    jwtIssuedTimestamp: number,
+  ): boolean;
 }
 
 export type TUserRole = keyof typeof USER_ROLE;

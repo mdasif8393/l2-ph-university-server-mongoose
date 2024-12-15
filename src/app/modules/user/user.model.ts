@@ -7,6 +7,9 @@ const userSchema = new Schema<TUser, UserModel>(
   {
     id: { type: String, required: true, unique: true },
     password: { type: String, required: true, select: 0 },
+    passwordChangedAt: {
+      type: Date,
+    },
     needsPasswordChange: { type: Boolean, default: true },
     role: {
       type: String,
@@ -55,5 +58,15 @@ userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
+
+// check password change time is bigger than iat time or not
+userSchema.statics.isJWTIssuedBeforePasswordChanged = async function (
+  passwordChangedTimestamp,
+  jwtIssuedTimestamp,
+) {
+  const passwordChangedTime =
+    new Date(passwordChangedTimestamp).getTime() / 1000;
+  return passwordChangedTime > jwtIssuedTimestamp;
+};
 
 export const User = model<TUser, UserModel>('User', userSchema);
