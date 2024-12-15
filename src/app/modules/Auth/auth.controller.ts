@@ -23,7 +23,7 @@ const changePassword = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Password is  successfully',
+    message: 'Password is changed successfully',
     data: null,
   });
 });
