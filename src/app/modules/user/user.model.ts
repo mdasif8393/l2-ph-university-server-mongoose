@@ -6,7 +6,7 @@ import { TUser, UserModel } from './user.interface';
 const userSchema = new Schema<TUser, UserModel>(
   {
     id: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: true, select: 0 },
     needsPasswordChange: { type: Boolean, default: true },
     role: {
       type: String,
@@ -26,7 +26,7 @@ const userSchema = new Schema<TUser, UserModel>(
 
 // using static check is user password matched
 userSchema.statics.isUserExistsByCustomId = async function (id) {
-  return await User.findOne({ id });
+  return await User.findOne({ id }).select('+password');
 };
 
 // using static check is password matched
