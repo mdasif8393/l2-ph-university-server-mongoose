@@ -15,7 +15,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(httpStatus.UNAUTHORIZED, 'You are not authorized');
     }
 
-    // check if the token is valid or not
+    // check if the token is valid or not and get userId, role, iat, exp inside decoded
     const decoded = jwt.verify(
       token,
       config.jwt_access_secret as string,

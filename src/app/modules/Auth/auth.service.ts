@@ -2,11 +2,12 @@
 /* eslint-disable no-unused-vars */
 import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import config from '../../config';
 import AppError from '../../errors/AppError';
 import { User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
+import { createToken } from './auth.utils';
 
 const loginUser = async (payload: TLoginUser) => {
   // check user exists ot not using static function
@@ -15,7 +16,7 @@ const loginUser = async (payload: TLoginUser) => {
     throw new AppError(httpStatus.NOT_FOUND, 'This user is not found!');
   }
 
-  // check password matched or not using static function
+  // check password matched or not using static function with database password
   if (!(await User.isPassWordMatch(payload?.password, user?.password))) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
   }
@@ -37,12 +38,23 @@ const loginUser = async (payload: TLoginUser) => {
     userId: user?.id,
     role: user?.role,
   };
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
-    expiresIn: '10d',
-  });
+  // create access token using custom id and role
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expires_in as string,
+  );
+
+  // create refresh token
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_expires_in as string,
+  );
 
   return {
     accessToken,
+    refreshToken,
     needsPasswordChange: user?.needsPasswordChange,
   };
 };
