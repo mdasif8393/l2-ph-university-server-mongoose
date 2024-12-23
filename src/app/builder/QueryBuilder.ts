@@ -80,6 +80,7 @@ class QueryBuilder<T> {
   /*
     let sort = '-createdAAt';
     if (query.sort) {
+    // join ia using for multiple query
       sort = (query.sort as string).split(',').join(' ');
     }
 
