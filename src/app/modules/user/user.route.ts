@@ -30,4 +30,6 @@ router.post(
 
 router.get('/me', auth('admin', 'faculty', 'student'), UserControllers.getMe);
 
+router.post('/change-status/:id', auth('admin'), UserControllers.changeStatus);
+
 export const UserRoutes = router;
