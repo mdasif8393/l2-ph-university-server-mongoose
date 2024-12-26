@@ -3,6 +3,7 @@ import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import config from '../../config';
 import AppError from '../../errors/AppError';
+import { sendImageToCloudinary } from '../../utils/sendInmageToCloudinary';
 import { Admin } from '../Admin/admin.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
@@ -43,6 +44,9 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     session.startTransaction();
     //set  generated id
     userData.id = await generateStudentId(admissionSemester);
+
+    //send image to cloudinary
+    sendImageToCloudinary();
 
     // create a user (transaction-1)
     const newUser = await User.create([userData], { session }); // array
