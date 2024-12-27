@@ -5,11 +5,14 @@ import sendResponse from '../../utils/sendResponse';
 import { UserServices } from './user.service';
 
 const createStudent = catchAsync(async (req, res) => {
-  console.log('req.file: ', req.file, 'req.body: ', req.body);
-  // const { password, student: studentData } = req.body;
-  // // const zodParsedData = studentValidationSchema.parse(studentData);
+  const { password, student: studentData } = req.body;
+  // const zodParsedData = studentValidationSchema.parse(studentData);
 
-  // const result = await UserServices.createStudentIntoDB(password, studentData);
+  const result = await UserServices.createStudentIntoDB(
+    req.file,
+    password,
+    studentData,
+  );
 
   // res.status(200).json({
   //   success: true,
@@ -20,7 +23,7 @@ const createStudent = catchAsync(async (req, res) => {
     success: true,
     statusCode: httpStatus.OK,
     message: 'Student is created successfully',
-    data: null,
+    data: result,
   });
 });
 

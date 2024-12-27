@@ -13,9 +13,11 @@ const router = express.Router();
 router.post(
   '/create-student',
   auth(USER_ROLE.admin),
+  // upload image file
   upload.single('file'),
+  // json student data
   (req: Request, res: Response, next: NextFunction) => {
-    req.body = JSON.parse(req?.body?.data);
+    req.body = JSON.parse(req.body.data);
     next();
   },
   validateRequest(CreateStudentValidationSchema),
