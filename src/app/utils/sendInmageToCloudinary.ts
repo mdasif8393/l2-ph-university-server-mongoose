@@ -23,12 +23,12 @@ export const sendImageToCloudinary = async (
   fs.unlink(path, (err) => {
     if (err) {
       throw new Error('failed to remove file from uploads folder');
-      return;
     }
   });
   return uploadResult;
 };
 
+// parse file and store to uploads folder
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, process.cwd() + '/uploads');
